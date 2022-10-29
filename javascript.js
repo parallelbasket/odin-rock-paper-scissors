@@ -13,4 +13,15 @@ function getComputerChoice() {
     }
     return choice;
 }
-console.log(getComputerChoice());
+
+// Make Player Selection
+// Create a variable 'choice'
+// Prompt player to choose 'rock' 'paper' or 'scissors'
+// Convert string to lower
+
+function makePlayerSelection() {
+    let choice;
+    choice = prompt("Type: Rock, Paper or Scissors");
+    choice = choice.toLowerCase();
+    return choice;
+}
