@@ -49,4 +49,33 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
-console.log(playRound(getComputerChoice(), makePlayerSelection()));
+// Game
+// Create variable record and result
+// Loop play round 5 times
+// Determine result
+// When round results in a win record++
+// When round reults in a loss record--
+// Check record to determine winner
+
+function game() {
+    let record = 0;
+    let result;
+    for (let i = 1; i <= 5; i++) {
+        result = playRound(getComputerChoice(), makePlayerSelection());
+        console.log(result);
+        switch (result) {
+            case "You win!": record++; break;
+            case "You lose!": record--; break;
+            default: break;
+        }
+    }
+    if (record > 0) {
+        console.log("After 5 rounds you have beat the computer");
+    } else if (record < 0) {
+        console.log("After 5 rounds you have lost to the computer");
+    } else {
+        console.log("You have drawn with the computer");
+    }
+}
+
+game();
