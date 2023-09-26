@@ -19,7 +19,6 @@ function getComputerChoice() {
 
 function getPlayerChoice() {
     let choice = prompt("Enter 'ROCK', 'PAPER' or 'SCISSORS'");
-    console.log(choice);
     switch(choice.toUpperCase()) {
         case 'ROCK': return ROCK; break;
         case 'PAPER': return PAPER; break;
@@ -81,8 +80,6 @@ function playRound() {
     return winner;
 }
 
-
-
 function game() {
     //Loop for five rounds
     //After each round print scores
@@ -104,8 +101,6 @@ function game() {
         displayScore(playerWinCount, computerWinCount, drawCount);
     }
     displayGameWinner(playerWinCount, computerWinCount);
-
-
 }
 
 game();
