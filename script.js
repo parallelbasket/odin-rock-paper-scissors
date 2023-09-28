@@ -4,6 +4,7 @@ const SCISSORS = 'SCISSORS';
 const COMPUTER_WINS = 'COMPUTER_WINS';
 const PLAYER_WINS = 'PLAYER_WINS';
 const DRAW = 'DRAW';
+let score = [0,0,0];//[Player win, Computer win, Draw]
 
 function getComputerChoice() {
     //Get a random number, multiply by three
@@ -17,17 +18,22 @@ function getComputerChoice() {
     }
 }
 
-function getPlayerChoice() {
-    let choice = prompt("Enter 'ROCK', 'PAPER' or 'SCISSORS'");
-    switch(choice.toUpperCase()) {
-        case 'ROCK': return ROCK; break;
-        case 'PAPER': return PAPER; break;
-        case 'SCISSORS': return SCISSORS; break;
-        default: getPlayerChoice(); break;
-    }
+function setupButtons() {
+    const buttons = document.querySelectorAll('button');    
+    let playerSelection;
+    
+
+    buttons.forEach((button) => {
+        button.addEventListener('click', getPlayerChoice);
+        button.addEventListener('click', playRound)
+    } )
 }
 
-function checkWinner(computerSelection, playerSelection) {
+function getPlayerChoice(e) {
+    playerSelection =  e.srcElement.id;
+}
+
+function checkRoundWinner(computerSelection, playerSelection) {
     if (computerSelection == playerSelection) {
         return DRAW;
     } else if (computerSelection == ROCK) {
@@ -49,58 +55,61 @@ function checkWinner(computerSelection, playerSelection) {
 }
 
 function displayWinner(winner, computerSelection, playerSelection) {
+    const message = document.querySelector('.result-display');
     if(winner == PLAYER_WINS) {
-        console.log('You win! ' + playerSelection + ' beats ' + computerSelection)
+        message.textContent = 'You win! ' + playerSelection + ' beats ' + computerSelection
     } else if (winner == COMPUTER_WINS) {
-        console.log('You lose! ' + computerSelection + ' beats ' + playerSelection)
+        message.textContent = 'You lose! ' + computerSelection + ' beats ' + playerSelection
     } else if (winner == DRAW) {
-        console.log("It's a draw. You both chose " + playerSelection);
+        message.textContent = "It's a draw. You both chose " + playerSelection;
     }
 }
 
-function displayGameWinner(playerWinCount, computerWinCount) {
-    if (playerWinCount == computerWinCount) {
-        console.log('The game is a draw.');
-    } else if (playerWinCount > computerWinCount) {
-        console.log('You won the game!');
-    } else {
-        console.log('You lost the game!');
+function displayGameWinner() {
+    const message = document.querySelector('.game-winner-display');
+    if (score[0] == 5) {
+        message.textContent = 'You won the game!';
+    } else if (score[1] == 5) {
+        message.textContent = 'You lost the game!';
     }
 }
 
-function displayScore(playerWinCount, computerWinCount, drawCount) {
-    console.log('You have won ' + playerWinCount + ' round, drawn ' + drawCount + ' rounds and lost ' + computerWinCount + ' rounds.');
+function endGame() {
+    const buttons = document.querySelectorAll('button'); 
+    if(score[0] == 5 || score[1] == 5) {
+        buttons.forEach((button) => {
+            button.removeEventListener('click', playRound)
+        } )
+    }
+}
+
+function displayScore() {
+    const message = document.querySelector('.score-display');
+    message.textContent = 'You have won ' + score[0] + ' rounds, drawn ' + score[2] + ' rounds and lost ' + score[1] + ' rounds.';
+}
+
+function updateScore(winner) {
+    if(winner == PLAYER_WINS) {
+        score[0]++;
+    } else if (winner == COMPUTER_WINS) {
+        score[1]++
+    } else if (winner == DRAW) {
+        score[2]++;
+    }
+}
+
+function checkGameWinner() {
+    if(score[0] == 5) {}
 }
 
 function playRound() {
     let computerSelection = getComputerChoice();
-    let playerSelection = getPlayerChoice();
-    let winner = checkWinner(computerSelection, playerSelection);
+    let winner = checkRoundWinner(computerSelection, playerSelection);updateScore(winner);
     displayWinner(winner, computerSelection, playerSelection);
+    displayScore();
+    displayGameWinner();
+    endGame();
     return winner;
 }
 
-function game() {
-    //Loop for five rounds
-    //After each round print scores
-    //Print a final score with a special message
-    let playerWinCount = 0;
-    let computerWinCount = 0;
-    let drawCount = 0;
-
-    for(let i = 0; i < 5; i++) {
-        let winner = playRound();
-
-        if (winner == PLAYER_WINS) {
-            playerWinCount++;
-        } else if (winner == COMPUTER_WINS) {
-            computerWinCount++;
-        } else if (winner == DRAW) {
-            drawCount++;
-        }
-        displayScore(playerWinCount, computerWinCount, drawCount);
-    }
-    displayGameWinner(playerWinCount, computerWinCount);
-}
-
-game();
+setupButtons();
